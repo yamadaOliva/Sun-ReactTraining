@@ -1,11 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
   filter: {
-    category: "",
-    price: [0, 0],
-    rating: 0,
-    search: "",
+    products: [],
+    categories: [],
+    brands: [],
+    ratings: [],
+    fetchProductUrl: "",
+    sortBy: { sortField: "brand", order: "ASC" },
+    searchKeyword: "",
+    isLoading: false,
   },
+  totalPages: 0,
+  hitOffPage: 16,
+  numOfPage: 1,
 };
 const filterSlice = createSlice({
   name: "filter",
@@ -14,7 +22,13 @@ const filterSlice = createSlice({
     setFilter: (state, action) => {
       state.filter = action.payload;
     },
+    setDefault: (state) => {
+      state.filter = initialState.filter;
+    },
+    setTotalPages: (state, action) => {
+      state.totalPages = action.payload;
+    },
   },
 });
-export const { setFilter } = filterSlice.actions;
+export const { setFilter, setDefault, setTotalPages } = filterSlice.actions;
 export default filterSlice.reducer;
