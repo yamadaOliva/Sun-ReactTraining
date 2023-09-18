@@ -10,6 +10,10 @@ import {
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import  CategoryFilter  from "./CategoryFilter/categoryFilter";
+import BrandFilter from "./BrandFilter/brandFilter";
+import PriceFilter from "./PriceFilter/priceFilter";
+import FreeshipFilter from "./FreeshipFilter/freeshipFilter";
+import RatingFilter from "./RatingFilter/ratingFilter";
 import { useEffect, useState } from "react";
 export default function FilterBar() {
   return (
@@ -31,6 +35,14 @@ export default function FilterBar() {
         </HStack>
         <Divider h="1px" bgColor="dark.200" />
         <CategoryFilter />
+        <Divider h="1px" bgColor="dark.200" />
+        <BrandFilter />
+        <Divider h="1px" bgColor="dark.200" />
+        <PriceFilter />
+        <Divider h="1px" bgColor="dark.200" />
+        <FreeshipFilter/>
+        <Divider h="1px" bgColor="dark.200" />
+        <RatingFilter />
       </VStack>
     </>
   );

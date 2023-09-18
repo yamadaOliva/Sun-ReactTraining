@@ -8,7 +8,6 @@ export default function CategoryFilter(props) {
         const fetchCategories = async () => {
             try {
                 const res = await getCategories();
-                console.log(res.data);
                 setCategories(res.data);
             } catch (error) {
                 console.log(error);
@@ -25,7 +24,6 @@ export default function CategoryFilter(props) {
       <VStack w="100%" alignItems="flex-start">
         <Accordion as="ul" allowToggle w="100%">
           {categories.map(item => {
-            console.log(item);
             return <CategoryChild key={item.name} item={item} />
           })}
         </Accordion>

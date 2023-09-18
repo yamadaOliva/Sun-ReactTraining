@@ -14,44 +14,56 @@ import { useEffect, useState } from "react";
 export default function CategoryChild({ item }) {
   return (
     <>
-      <HStack gap="0">
-        {1 ? (
-          <Box fontSize="12px" color="dark.500" mr="16px">
-            <FontAwesomeIcon icon={faCaretDown} />
-          </Box>
-        ) : (
-          <Box fontSize="12px" color="dark.500" mr="16px">
-            <FontAwesomeIcon icon={faCaretUp} />
-          </Box>
+      <AccordionItem as="li" border="none" listStyleType="none">
+        {({ isExpanded }) => (
+          <>
+            <AccordionButton pl="0px" pr="0px" _hover={{ bgColor: "white" }}>
+              <HStack gap="0">
+                {isExpanded ? (
+                  <Box fontSize="12px" color="dark.500" mr="16px">
+                    <FontAwesomeIcon icon={faCaretDown} />
+                  </Box>
+                ) : (
+                  <Box fontSize="12px" color="dark.500" mr="16px">
+                    <FontAwesomeIcon icon={faCaretUp} />
+                  </Box>
+                )}
+                <Text
+                  sx={styles.title}
+                  fontWeight={isExpanded ? "bold" : "400"}
+                >
+                  {item?.name}
+                </Text>
+                <Tag sx={styles.tag}>{item?.quantity}</Tag>
+              </HStack>
+            </AccordionButton>
+            <AccordionPanel as="ul" p="0">
+              {item.lv1.map((val) => {
+                return (
+                  <HStack key={val.name} as="button" sx={styles.titleWrapper}>
+                    {1 === val.name ? (
+                      <Box fontSize="12px" color="dark.500" mr="16px">
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      </Box>
+                    ) : (
+                      <Box fontSize="12px" color="dark.500" mr="16px">
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      </Box>
+                    )}
+                    <Text
+                      sx={styles.title}
+                      fontWeight={1 === val.name ? "bold" : "400"}
+                    >
+                      {val?.name}
+                    </Text>
+                    <Tag sx={styles.tag}>{val?.quantity}</Tag>
+                  </HStack>
+                );
+              })}
+            </AccordionPanel>
+          </>
         )}
-        <Text sx={styles.title} fontWeight={1 === item.name ? "bold" : "400"}>
-          {item?.name}
-        </Text>
-        <Tag sx={styles.tag}>{item?.quantity}</Tag>
-      </HStack>
-
-      {item.lv1.map((val) => {
-        return (
-          <HStack key={val.name} as="button" sx={styles.titleWrapper}>
-            {1 === val.name ? (
-              <Box fontSize="12px" color="dark.500" mr="16px">
-                <FontAwesomeIcon icon={faCaretDown} />
-              </Box>
-            ) : (
-              <Box fontSize="12px" color="dark.500" mr="16px">
-                <FontAwesomeIcon icon={faCaretUp} />
-              </Box>
-            )}
-            <Text
-              sx={styles.title}
-              fontWeight={1 === val.name ? "bold" : "400"}
-            >
-              {val?.name}
-            </Text>
-            <Tag sx={styles.tag}>{val?.quantity}</Tag>
-          </HStack>
-        );
-      })}
+      </AccordionItem>
     </>
   );
 }
