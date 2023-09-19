@@ -30,7 +30,7 @@ const filterSlice = createSlice({
     setPrice: (state, action) => {
       state.price = action.payload;
     },
-    setBrands: (state, action) => {
+    setBrandsRedux: (state, action) => {
       state.brands = action.payload;
     },
     setCategorieslv0: (state, action) => {
@@ -39,7 +39,7 @@ const filterSlice = createSlice({
     setCategorieslv1: (state, action) => {
       state.categorieslv1 = action.payload;
     },
-    setRating: (state, action) => {
+    setRatingRedux: (state, action) => {
       state.rating = action.payload;
     },
     setIsFreeShip: (state, action) => {
@@ -53,10 +53,10 @@ export const {
   setHitOffPageRedux,
   setNumOfPage,
   setPrice,
-  setBrands,
+  setBrandsRedux,
   setCategorieslv0,
   setCategorieslv1,
-  setRating,
+  setRatingRedux,
   setIsFreeShip,
 } = filterSlice.actions;
 export default filterSlice.reducer;

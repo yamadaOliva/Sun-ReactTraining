@@ -9,31 +9,23 @@ export default function Pagination() {
   const dispatch = useDispatch();
   const [totalPage, setTotalPage] = useState(filter?.totalPages);
   const [currentPage, setCurrentPage] = useState(filter?.numOfPage);
-  let arr = [1, 2, 3, 4, 5];
-  const setArr = () => {
+  const [arr, setArr] = useState([1, 2, 3, 4, 5]);
+
+  const handlePageClick = (item) => {
+    setCurrentPage(item);
+    dispatch(setNumOfPage(item));
+  };
+  useEffect(() => {
     if (currentPage > 3)
-      return [
+      setArr([
         currentPage - 2,
         currentPage - 1,
         currentPage,
         currentPage + 1,
         currentPage + 2,
-      ];
-    else if (currentPage > totalPage - 1) {
-      return [
-        totalPage - 4,
-        totalPage - 3,
-        totalPage - 2,
-        totalPage - 1,
-        totalPage,
-      ];
-    }
-  };
-  const handlePageClick = (item) => {
-    setCurrentPage(item);
-    dispatch(setNumOfPage(item));
-    setArr();
-  };
+      ]);
+    else setArr([1, 2, 3, 4, 5]);
+  }, [currentPage]);
   return (
     <>
       <HStack mt="80px">

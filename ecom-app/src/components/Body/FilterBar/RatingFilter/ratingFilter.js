@@ -24,6 +24,7 @@ export default function RatingFilter(props) {
         </Text>
         <VStack mt="8px">
           {ratings.map((item) => {
+            if (item.rating === 6) return null;
             return (
               <RatingFilterChild
                 key={item.rating}

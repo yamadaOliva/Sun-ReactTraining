@@ -13,8 +13,7 @@ export default function ProductList() {
   const filter = useSelector((state) => state.filter);
   const [products, setProducts] = useState([]);
   const [hitOffPage, setHitOffPage] = useState(filter.hitOffPage);
- 
- 
+
   const hitOffPageChange = (e) => {
     setHitOffPage(e.target.value);
     dispatch(setHitOffPageRedux(e.target.value));
@@ -34,7 +33,7 @@ export default function ProductList() {
       }
     };
     fetchProducts();
-  }, [ filter.numOfPage, hitOffPage]);
+  }, [filter.numOfPage, hitOffPage]);
   return (
     <>
       <VStack justify="flex-start" gap="0">

@@ -12,6 +12,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
 export default function CategoryChild({ item }) {
+  const [currentLv1, setCurrentLv1] = useState("");
+  useEffect(() => {
+    console.log(currentLv1);
+  }, [currentLv1]);
   return (
     <>
       <AccordionItem as="li" border="none" listStyleType="none">
@@ -40,8 +44,16 @@ export default function CategoryChild({ item }) {
             <AccordionPanel as="ul" p="0">
               {item.lv1.map((val) => {
                 return (
-                  <HStack key={val.name} as="button" sx={styles.titleWrapper}>
-                    {1 === val.name ? (
+                  <HStack
+                    key={val.name}
+                    as="button"
+                    sx={styles.titleWrapper}
+                    onClick={() => {
+                      if (currentLv1 === val.name) setCurrentLv1("");
+                      else setCurrentLv1(val.name);
+                    }}
+                  >
+                    {currentLv1 === val.name ? (
                       <Box fontSize="12px" color="dark.500" mr="16px">
                         <FontAwesomeIcon icon={faCaretDown} />
                       </Box>
@@ -52,7 +64,7 @@ export default function CategoryChild({ item }) {
                     )}
                     <Text
                       sx={styles.title}
-                      fontWeight={1 === val.name ? "bold" : "400"}
+                      fontWeight={currentLv1 === val.name ? "bold" : "400"}
                     >
                       {val?.name}
                     </Text>

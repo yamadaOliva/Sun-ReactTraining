@@ -7,7 +7,6 @@ export default function BrandChild({ item }) {
   return (
     <>
       <Checkbox
-        isChecked={1? true : false}
         icon={
           <Box fontSize="5px">
             <FontAwesomeIcon icon={faCircle} />
@@ -21,10 +20,7 @@ export default function BrandChild({ item }) {
           pointerEvents="none"
           cursor="pointer"
         >
-          <Text
-            sx={styles.title}
-            fontWeight={1 === item.name ? "bold" : "400"}
-          >
+          <Text sx={styles.title} fontWeight={1 === item.name ? "bold" : "400"}>
             {item?.name}
           </Text>
           <Tag sx={styles.tag}>{item?.quantity}</Tag>
