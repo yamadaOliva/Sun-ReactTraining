@@ -9,12 +9,17 @@ const initialState = {
   categorieslv0: "",
   categorieslv1: "",
   rating: 0,
-  isFreeShip: false,
+  isFreeShip: true,
+  products: [],
+  isFiltering: false,
 };
 const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
+    setProducts: (state, action) => {
+      state.products = action.payload;
+    },
     setDefault: (state) => {
       state.filter = initialState.filter;
     },
@@ -29,21 +34,38 @@ const filterSlice = createSlice({
     },
     setPrice: (state, action) => {
       state.price = action.payload;
+      state.isFiltering = true;
     },
     setBrandsRedux: (state, action) => {
       state.brands = action.payload;
+      state.isFiltering = true;
     },
     setCategorieslv0: (state, action) => {
       state.categorieslv0 = action.payload;
+      state.isFiltering = true;
     },
     setCategorieslv1: (state, action) => {
       state.categorieslv1 = action.payload;
+      state.isFiltering = true;
     },
     setRatingRedux: (state, action) => {
       state.rating = action.payload;
+      state.isFiltering = true;
     },
-    setIsFreeShip: (state, action) => {
+    setIsFreeShipRedux: (state, action) => {
       state.isFreeShip = action.payload;
+      state.isFiltering = true;
+    },
+    setDefault: (state) => {
+      state.numOfPage = 1;
+      state.rating = 0;
+      state.categorieslv0 = "";
+      state.categorieslv1 = "";
+      state.brands = [];
+      state.price = [0, 1000];
+      state.isFreeShip = true;
+      state.hitOffPage = 16;
+      state.isFiltering = false;
     },
   },
 });
@@ -57,6 +79,7 @@ export const {
   setCategorieslv0,
   setCategorieslv1,
   setRatingRedux,
-  setIsFreeShip,
+  setIsFreeShipRedux,
+  setProducts,
 } = filterSlice.actions;
 export default filterSlice.reducer;

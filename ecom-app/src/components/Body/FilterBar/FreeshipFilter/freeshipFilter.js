@@ -1,5 +1,9 @@
 import { FormControl, FormLabel, Switch, Text, VStack } from "@chakra-ui/react";
+import { setIsFreeShipRedux } from "../../../../redux/slices/filterSlice";
+import { useDispatch, useSelector } from "react-redux";
 export default function FreeshipFilter(props) {
+  const dispatch = useDispatch();
+  const isFreeShip = useSelector((state) => state.filter.isFreeShip);
   return (
     <>
       <VStack w="100%" alignItems="flex-start" pt="32px" pb="32px">
@@ -21,8 +25,12 @@ export default function FreeshipFilter(props) {
             Display only items with free shipping
           </FormLabel>
           <Switch
+            onChange={() => {
+              dispatch(setIsFreeShipRedux(!isFreeShip));
+            }}
             id="free-shipping"
-            checked={1 ? true : false}
+            colorScheme="primary"
+            isChecked={isFreeShip}
           />
         </FormControl>
       </VStack>

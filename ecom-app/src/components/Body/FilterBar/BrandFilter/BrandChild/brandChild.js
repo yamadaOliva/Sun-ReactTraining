@@ -2,16 +2,28 @@ import { Box, Checkbox, HStack, Tag, Text } from "@chakra-ui/react";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setBrandsRedux } from "../../../../../redux/slices/filterSlice";
 export default function BrandChild({ item }) {
+  const brands = useSelector((state) => state.filter.brands);
+  const dispatch = useDispatch();
+  const handleBrandClick = () => {
+    if (brands.includes(item.name)) {
+      dispatch(setBrandsRedux(brands.filter((brand) => brand !== item.name)));
+    } else {
+      dispatch(setBrandsRedux([...brands, item.name]));
+    }
+  };
   return (
     <>
       <Checkbox
+        isChecked={brands.includes(item.name) ? true : false}
         icon={
           <Box fontSize="5px">
             <FontAwesomeIcon icon={faCircle} />
           </Box>
         }
+        onChange={() => handleBrandClick()}
       >
         <HStack
           as="button"
@@ -20,7 +32,12 @@ export default function BrandChild({ item }) {
           pointerEvents="none"
           cursor="pointer"
         >
-          <Text sx={styles.title} fontWeight={1 === item.name ? "bold" : "400"}>
+          <Text
+            sx={styles.title}
+            fontWeight={
+              brands.includes(item.name) === item.name ? "bold" : "400"
+            }
+          >
             {item?.name}
           </Text>
           <Tag sx={styles.tag}>{item?.quantity}</Tag>

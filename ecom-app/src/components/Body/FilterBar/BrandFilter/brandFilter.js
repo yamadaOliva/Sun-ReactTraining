@@ -11,20 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import BrandChild from "./BrandChild/brandChild";
 import { getBrands } from "../../../../services/filterServices";
-import { useDispatch } from "react-redux";
-import { setBrandsRedux } from "../../../../redux/slices/filterSlice";
 export default function BrandFilter(props) {
-  const dispatch = useDispatch();
   const [searchKey, setSearchKey] = useState("");
   const [brands, setBrands] = useState([]);
   useEffect(() => {
     const fetchBrands = async () => {
       try {
         const res = await getBrands();
-        let brandsWithTrueFlase = res.data.map((item) => {
-          return { ...item, isChecked: false };
-        });
-        dispatch(setBrandsRedux(brandsWithTrueFlase));
         setBrands(res.data);
       } catch (error) {
         console.log(error);

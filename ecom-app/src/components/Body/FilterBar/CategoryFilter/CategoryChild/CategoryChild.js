@@ -10,20 +10,36 @@ import {
 import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-
+import {
+  setCategorieslv0,
+  setCategorieslv1,
+} from "../../../../../redux/slices/filterSlice";
+import { useDispatch, useSelector } from "react-redux";
 export default function CategoryChild({ item }) {
-  const [currentLv1, setCurrentLv1] = useState("");
-  useEffect(() => {
-    console.log(currentLv1);
-  }, [currentLv1]);
+  const dispatch = useDispatch();
+  const categorieslv0 = useSelector((state) => state.filter.categorieslv0);
+  const categorieslv1 = useSelector((state) => state.filter.categorieslv1);
   return (
     <>
       <AccordionItem as="li" border="none" listStyleType="none">
         {({ isExpanded }) => (
           <>
-            <AccordionButton pl="0px" pr="0px" _hover={{ bgColor: "white" }}>
+            <AccordionButton
+              pl="0px"
+              pr="0px"
+              _hover={{ bgColor: "white" }}
+              onClick={() => {
+                if (categorieslv0 === item.name) {
+                  dispatch(setCategorieslv0(""));
+                  dispatch(setCategorieslv1(""));
+                } else {
+                  dispatch(setCategorieslv0(item.name));
+                  dispatch(setCategorieslv1(""));
+                }
+              }}
+            >
               <HStack gap="0">
-                {isExpanded ? (
+                {isExpanded && categorieslv0 === item.name? (
                   <Box fontSize="12px" color="dark.500" mr="16px">
                     <FontAwesomeIcon icon={faCaretDown} />
                   </Box>
@@ -34,7 +50,7 @@ export default function CategoryChild({ item }) {
                 )}
                 <Text
                   sx={styles.title}
-                  fontWeight={isExpanded ? "bold" : "400"}
+                  fontWeight={isExpanded && categorieslv0 === item.name? "bold" : "400"}
                 >
                   {item?.name}
                 </Text>
@@ -42,18 +58,19 @@ export default function CategoryChild({ item }) {
               </HStack>
             </AccordionButton>
             <AccordionPanel as="ul" p="0">
-              {item.lv1.map((val) => {
+              {categorieslv0 === item.name&&item.lv1.map((val) => {
                 return (
                   <HStack
                     key={val.name}
                     as="button"
                     sx={styles.titleWrapper}
                     onClick={() => {
-                      if (currentLv1 === val.name) setCurrentLv1("");
-                      else setCurrentLv1(val.name);
+                      if (categorieslv1 === val.name)
+                        dispatch(setCategorieslv1(""));
+                      else dispatch(setCategorieslv1(val.name));
                     }}
                   >
-                    {currentLv1 === val.name ? (
+                    {categorieslv1 === val.name ? (
                       <Box fontSize="12px" color="dark.500" mr="16px">
                         <FontAwesomeIcon icon={faCaretDown} />
                       </Box>
@@ -64,7 +81,7 @@ export default function CategoryChild({ item }) {
                     )}
                     <Text
                       sx={styles.title}
-                      fontWeight={currentLv1 === val.name ? "bold" : "400"}
+                      fontWeight={categorieslv1 === val.name ? "bold" : "400"}
                     >
                       {val?.name}
                     </Text>

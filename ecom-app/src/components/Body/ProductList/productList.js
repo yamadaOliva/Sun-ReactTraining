@@ -2,43 +2,123 @@ import Pagination from "../Pagination/pagination";
 import { Divider, HStack, Select, SimpleGrid, VStack } from "@chakra-ui/react";
 import ProductCard from "./ProductDetail/ProductCard";
 import { useEffect, useState } from "react";
-import { paginate } from "../../../services/filterServices";
+import {
+  paginate,
+  priceSort,
+  filterServices,
+} from "../../../services/filterServices";
 import {
   setTotalPages,
   setHitOffPageRedux,
+  setProducts,
 } from "../../../redux/slices/filterSlice";
 import { useDispatch, useSelector } from "react-redux";
 export default function ProductList() {
   const dispatch = useDispatch();
   const filter = useSelector((state) => state.filter);
-  const [products, setProducts] = useState([]);
-  const [hitOffPage, setHitOffPage] = useState(filter.hitOffPage);
-
+  const [sortBy, setSortBy] = useState("feature"); // feature, price_asc, price_desc
   const hitOffPageChange = (e) => {
-    setHitOffPage(e.target.value);
     dispatch(setHitOffPageRedux(e.target.value));
   };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await paginate(filter.numOfPage, hitOffPage);
+        const res = await paginate(filter.numOfPage, filter.hitOffPage);
         dispatch(
           setTotalPages(
             Math.ceil(res.headers["x-total-count"] / filter.hitOffPage + 1)
           )
         );
-        setProducts(res.data);
+        dispatch(setProducts(res.data));
       } catch (error) {
         console.log(error);
       }
     };
-    fetchProducts();
-  }, [filter.numOfPage, hitOffPage]);
+    const fetchProductsByPrice = async (value) => {
+      try {
+        const res = await priceSort(filter.numOfPage, filter.hitOffPage, value);
+        dispatch(
+          setTotalPages(
+            Math.ceil(res.headers["x-total-count"] / filter.hitOffPage + 1)
+          )
+        );
+        dispatch(setProducts(res.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+      const fetchProductsByFilter = async (options) => {
+        try {
+          const res = await filterServices(
+            filter.numOfPage,
+            filter.hitOffPage,
+            options
+          );
+          dispatch(
+            setTotalPages(
+              Math.ceil(res.headers["x-total-count"] / filter.hitOffPage + 1)
+            )
+          );
+          dispatch(setProducts(res.data));
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    if (!filter.isFiltering) {
+      switch (sortBy) {
+        case "feature":
+          fetchProducts();
+          break;
+        case "price_asc":
+          fetchProductsByPrice("asc");
+          break;
+        case "price_desc":
+          fetchProductsByPrice("desc");
+          break;
+      }
+    } else {
+      let options = {};
+      if (filter.categorieslv0.length > 0) {
+        options.categorieslv0 = filter.categorieslv0;
+      }
+      if (filter.categorieslv1.length > 0) {
+        options.categorieslv1 = filter.categorieslv1;
+      }
+      if (filter.price[0] > 0 || filter.price[1] < 1000) {
+        options.price = filter.price;
+      }
+      if (filter.brands.length > 0) {
+        options.brands = filter.brands;
+      }
+      if (filter.rating > 0) {
+        options.rating = filter.rating;
+      }
+      if (filter.isFreeShip) {
+        options.isFreeShip = filter.isFreeShip;
+      }
+      fetchProductsByFilter(options);
+    }
+  }, [
+    filter.hitOffPage,
+    filter.categorieslv0,
+    filter.categorieslv1,
+    filter.price,
+    filter.isFreeShip,
+    filter.rating,
+    filter.brands,
+    filter.numOfPage,
+    sortBy,
+  ]);
   return (
     <>
       <VStack justify="flex-start" gap="0">
         <HStack h="80px" alignSelf="flex-end">
-          <Select variant="unstyled" size="xs" defaultValue="feature">
+          <Select
+            variant="unstyled"
+            size="xs"
+            defaultValue="feature"
+            onChange={(e) => setSortBy(e.target.value)}
+          >
             <option value="feature">Sort by featured</option>
             <option value="price_asc">Price ascending</option>
             <option value="price_desc">Price descending</option>
@@ -56,8 +136,8 @@ export default function ProductList() {
         </HStack>
         <Divider h="1px" bgColor="dark.200" />
         <SimpleGrid columns={4} spacing="30px" flex={1} w="100%" pt="32px">
-          {products &&
-            products?.map((product) => {
+          {filter.products &&
+            filter.products?.map((product) => {
               return <ProductCard key={product.objectID} product={product} />;
             })}
         </SimpleGrid>

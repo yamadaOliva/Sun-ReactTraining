@@ -7,12 +7,23 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setPrice } from "../../../../redux/slices/filterSlice";
+import { useDispatch, useSelector } from "react-redux";
 export default function PriceFilter() {
-  const [rangeValue, setRangeValue] = useState([0, 100]);
+  const dispatch = useDispatch();
+  const price = useSelector((state) => state.filter.price);
+  const [rangeValue, setRangeValue] = useState();
   const handleRangeInputOnChangeEnd = (value) => {
-    setRangeValue(value);
-  }
+    value[0] = Math.round(value[0] * 10);
+    value[1] = Math.round(value[1] * 10);
+    if (+value[0] !== price[0] || +value[1] !== price[1]) {
+      dispatch(setPrice(value));
+    }
+  };
+  useEffect(() => {
+    setRangeValue([price[0] / 10, price[1] / 10]);
+  }, []);
   return (
     <>
       <VStack w="100%" alignItems="flex-start" pt="32px" pb="32px">
@@ -20,11 +31,11 @@ export default function PriceFilter() {
           PRICE
         </Text>
         <RangeSlider
-          aria-label={['min', 'max'].toString()}
-          defaultValue={[0, 100]}
+          aria-label={["min", "max"].toString()}
+          defaultValue={[0, 1000]}
           value={rangeValue}
-          onChange={value => {
-            setRangeValue(value)
+          onChange={(value) => {
+            setRangeValue(value);
           }}
           onChangeEnd={handleRangeInputOnChangeEnd}
           mt="24px"
@@ -42,7 +53,7 @@ export default function PriceFilter() {
                 $
               </Text>
               <Text fontSize="12px" fontWeight="bold">
-              {Math.round(0 + rangeValue[0] * 10)}
+                {Math.round(0 + price[0])}
               </Text>
             </HStack>
           </RangeSliderThumb>
@@ -55,7 +66,7 @@ export default function PriceFilter() {
                 $
               </Text>
               <Text fontSize="12px" fontWeight="bold">
-              {Math.round(0 + rangeValue[1] * 10)}
+                {Math.round(0 + price[1])}
               </Text>
             </HStack>
           </RangeSliderThumb>
